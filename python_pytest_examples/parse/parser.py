@@ -1,17 +1,18 @@
 from abc import ABC, abstractmethod
-from io import TextIOBase
+from typing import IO, Hashable, Tuple
+import pandas as pd
 
 from python_pytest_examples.report import Day, Report
 
 
 class Parser(ABC):
     @abstractmethod
-    def parse(self, file: TextIOBase) -> Report:
+    def parse(self, file: IO) -> Report:
         pass
 
 
 class TextParser(Parser):
-    def parse(self, file: TextIOBase) -> Report:
+    def parse(self, file: IO) -> Report:
         return Report(days=list(map(self.__parse_line, file)))
 
     @staticmethod
@@ -36,13 +37,34 @@ class TextParser(Parser):
         return int("{}{}".format(*parts))
 
 
+class ExcelParser(Parser):
+    def parse(self, file: IO) -> Report:
+        data = pd.read_excel(file)
+        return Report(days=list(map(self.__parse_row, data.iterrows())))
+
+    @staticmethod
+    def __parse_row(row: Tuple[Hashable, pd.Series]) -> Day:
+        _, data = row
+        day, income, spent = data
+
+        print(type(income))
+        print(int(income * 100))
+
+        return Day(
+            day=int(day),
+            income=int(income*100),
+            spent=int(spent*100),
+        )
+
+
 MAP_PARSERS = [
-    (".txt", TextParser),
+    (".txt", TextParser, "r"),
+    (".xlsx", ExcelParser, "rb"),
 ]
 
 
-def get_parser(file_name: str) -> Parser:
-    for extension, parser in MAP_PARSERS:
+def get_parser(file_name: str) -> Tuple[Parser, str]:
+    for extension, parser, mode in MAP_PARSERS:
         if file_name.endswith(extension):
-            return parser()
+            return (parser(), mode)
     raise Exception("Invalid file extension")

@@ -9,6 +9,8 @@ packages = [{include = "python_pytest_examples"}]
 
 [tool.poetry.dependencies]
 python = "^3.9"
+pandas = "^1.5.3"
+openpyxl = "^3.1.1"
 
 
 [tool.poetry.group.dev.dependencies]
