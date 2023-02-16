@@ -9,5 +9,15 @@ path = filedialog.askopenfilename(
 parser = get_parser(path)
 
 with open(path) as file:
-    print(parser.parse(file))
+    report = parser.parse(file)
 
+    for day in report:
+        print(
+            "Day {}, income €{}.{}, spent €{}.{}".format(
+                day.day,
+                str(day.income // 100).ljust(2, '0'),
+                str(day.income % 100).ljust(2, '0'),
+                str(day.spent // 100).ljust(2, '0'),
+                str(day.spent % 100).ljust(2, '0'),
+            )
+        )
