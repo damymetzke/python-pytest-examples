@@ -1,0 +1,16 @@
+[tool.poetry]
+name = "python-pytest-examples"
+version = "0.1.0"
+description = "Some pytest examples"
+authors = ["Damy Metzke <damy.metzke@gmail.com>"]
+license = "MIT"
+readme = "README.md"
+packages = [{include = "python_pytest_examples"}]
+
+[tool.poetry.dependencies]
+python = "^3.9"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
