@@ -1,17 +1,17 @@
 from abc import ABC, abstractmethod
-from io import TextIOWrapper
+from io import TextIOBase
 
 from python_pytest_examples.report import Day, Report
 
 
 class Parser(ABC):
     @abstractmethod
-    def parse(self, file: TextIOWrapper) -> Report:
+    def parse(self, file: TextIOBase) -> Report:
         pass
 
 
 class TextParser(Parser):
-    def parse(self, file: TextIOWrapper) -> Report:
+    def parse(self, file: TextIOBase) -> Report:
         return Report(days=list(map(self.__parse_line, file)))
 
     @staticmethod
